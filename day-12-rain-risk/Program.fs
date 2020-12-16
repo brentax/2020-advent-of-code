@@ -21,9 +21,6 @@ let readInput =
         Seq.map (fun line -> (line.Substring(0, 1), Double.Parse(line.Substring(1))))
 
 let moveForward (state: FerryState) (distance: float) : FerryState =
-    // sin = opposite over hypotenuse
-    // cos = adjacent over hypotenuse
-    // tan = opposite over adjacent
     let headingRad = Math.PI / 180.0 * state.Heading
     let deltaX = distance * (Math.Cos headingRad)
     let deltaY = distance * (Math.Sin  headingRad)
@@ -49,8 +46,6 @@ let rotateWaypoint (state: FerryWaypointState) (angle: float) : FerryWaypointSta
     { state with WaypointX = xPrime; WaypointY = yPrime }
 
 let executeWaypointCommand (state: FerryWaypointState) (command: string * float) : FerryWaypointState =
-    printfn "Current state: %A" state
-    printfn "Command: %A" command
     let (action, value) = command
     match (action) with
     | "N" -> { state with WaypointY = state.WaypointY + value }
@@ -65,8 +60,8 @@ let executeWaypointCommand (state: FerryWaypointState) (command: string * float)
 let main argv =
     let commands = readInput
     // let finalState = commands |> Seq.fold executeCommand { X = 0.0; Y = 0.0; Heading = 0.0 }
-    // let manhattanDistance = (Math.Abs finalState.X) + (Math.Abs finalState.Y)
-    // printfn "Manhattan distance travelled: %f" manhattanDistance
+    let manhattanDistance = (Math.Abs finalState.X) + (Math.Abs finalState.Y)
+    printfn "Manhattan distance travelled: %f" manhattanDistance
 
     let finalState2 = commands |> Seq.fold executeWaypointCommand { FerryX = 0.0; FerryY = 0.0; WaypointX = 10.0 ; WaypointY = 1.0 }
     let manhattanDistance2 = (Math.Abs finalState2.FerryX) + (Math.Abs finalState2.FerryY)
